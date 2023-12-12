@@ -1,0 +1,3 @@
+[submodule "fubao-server-secret"]
+	path = fubao-server-secret
+	url = https://github.com/YouAndMyFuBao/fubao-server-secret.git
