@@ -28,7 +28,7 @@ public class OpenApiConfig {
                 .description("base project");
         return new OpenAPI()
                 .addServersItem(new Server().url(url))
-                .components(new Components().addSecuritySchemes("bearerAuth",securityScheme))
+                .components(new Components().addSecuritySchemes("bearerAuth", securityScheme))
                 .security(Collections.singletonList(securityRequirement))
                 .info(info);
     }
