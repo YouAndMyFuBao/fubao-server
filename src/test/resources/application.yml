@@ -5,4 +5,5 @@ spring:
       - openapi
       - oauth
       - redis
+      - s3
     active: test
