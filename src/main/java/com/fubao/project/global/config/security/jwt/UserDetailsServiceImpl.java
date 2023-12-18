@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional(readOnly = true)
@@ -21,7 +22,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        Optional<Member> member = memberRepository.findById(Long.parseLong(username));
+        Optional<Member> member = memberRepository.findById(UUID.fromString(username));
         return User.withUsername(username)
                 .password(member.get().getId().toString())
                 .authorities(AuthorityUtils.NO_AUTHORITIES)

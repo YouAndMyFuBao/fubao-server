@@ -41,6 +41,7 @@ public class JwtTokenProvider {
 
     private final JwtParser jwtParser;
     private final RedisUtil redisUtil;
+
     public JwtTokenProvider(
             @Value("30") long accessTokenMinute,
             @Value("14") long refreshTokenDay,
@@ -58,7 +59,7 @@ public class JwtTokenProvider {
 
     public AuthTokens createAccessToken(Member member) {
         AuthTokens authTokens = AuthTokens.of(createToken(member.getId().toString()), createRefreshToken(member.getId().toString()));
-        redisUtil.setStringData(member.getId().toString(),authTokens.getRefreshToken(), Duration.ofDays(refreshTokenValidityInDay));
+        redisUtil.setStringData(member.getId().toString(), authTokens.getRefreshToken(), Duration.ofDays(refreshTokenValidityInDay));
         return authTokens;
     }
 
