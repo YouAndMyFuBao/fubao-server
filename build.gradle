@@ -10,7 +10,9 @@ version = '0.0.1-SNAPSHOT'
 java {
     sourceCompatibility = '17'
 }
-
+configurations {
+    querydsl.extendsFrom compileClasspath
+}
 repositories {
     mavenCentral()
 }
@@ -53,7 +55,11 @@ dependencies {
     implementation 'software.amazon.awssdk:s3'
 
     testImplementation 'org.springframework.security:spring-security-test'
-
+    //querydsl 설정 추가
+    implementation "com.querydsl:querydsl-jpa:5.0.0:jakarta"
+    annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 }
 
 tasks.named('test') {
