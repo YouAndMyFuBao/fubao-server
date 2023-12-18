@@ -15,29 +15,35 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "member")
 public class Member extends BaseEntity {
+
     @Id
     @Column(columnDefinition = "BINARY(16)", name = "id")
-    UUID id;
+    private UUID id;
 
     @Column(name = "oauth_provider")
     @Enumerated(EnumType.STRING)
     private OAuthProvider oauthProvider;
+
     @Column(name = "provider_id")
     private String providerId;
+
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private MemberRole memberRole;
+
     public static Member of(
-            UUID id, OAuthProvider oAuthProvider, String providerId,MemberRole memberRole
+            UUID id, OAuthProvider oAuthProvider, String providerId, MemberRole memberRole
     ) {
         return Member.builder()
+                .id(id)
                 .memberRole(memberRole)
                 .providerId(providerId)
                 .oAuthProvider(oAuthProvider)
                 .build();
     }
+
     @Builder
-    public Member (UUID id, OAuthProvider oAuthProvider, String providerId,MemberRole memberRole) {
+    public Member(UUID id, OAuthProvider oAuthProvider, String providerId, MemberRole memberRole) {
         this.id = id;
         this.oauthProvider = oAuthProvider;
         this.providerId = providerId;

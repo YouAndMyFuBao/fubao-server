@@ -8,6 +8,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
@@ -54,6 +55,7 @@ public class S3Util {
                 .bucket(bucketName)
                 .key(fileName)
                 .contentType(contentType)
+                .contentDisposition("inline")
                 .acl(ObjectCannedACL.BUCKET_OWNER_FULL_CONTROL)
                 .build();
         s3Client.putObject(putObjectRequest, RequestBody.fromFile(uploadFile));
@@ -75,4 +77,13 @@ public class S3Util {
         }
         return Optional.empty();
     }
+
+    public void delete(String imageUrl) {
+        DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+                .bucket(bucketName)
+                .key(imageUrl.substring(cloudFrontDistribution.length()))
+                .build();
+        s3Client.deleteObject(deleteObjectRequest);
+    }
+
 }
