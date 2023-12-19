@@ -26,6 +26,7 @@ public class OAuthLoginServiceImp implements OAuthLoginService {
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
+    @Transactional
     public AuthTokens login(OAuthLoginParams params) {
         OAuthInfoResponse oAuthInfoResponse = requestOAuthInfoService.request(params);
         Member member = findOrCreateMember(oAuthInfoResponse);
@@ -38,8 +39,7 @@ public class OAuthLoginServiceImp implements OAuthLoginService {
                 .orElseGet(() -> signUp(oAuthInfoResponse));
     }
 
-    @Transactional
-    protected Member signUp(OAuthInfoResponse oAuthInfoResponse) {
+    private Member signUp(OAuthInfoResponse oAuthInfoResponse) {
         Member member = Member.builder()
                 .id(UUID.randomUUID())
                 .oAuthProvider(oAuthInfoResponse.getOAuthProvider())
