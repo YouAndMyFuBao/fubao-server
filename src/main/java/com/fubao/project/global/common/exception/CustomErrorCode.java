@@ -23,7 +23,8 @@ public enum CustomErrorCode {
     //TEST
 
     TEST(HttpStatus.OK, "TEST 입니다"),
-    NOT_GET_KAKAO_INFO(HttpStatus.BAD_REQUEST, "카카오 정보를 가져오는데 실패했습니다.");
+    NOT_GET_KAKAO_INFO(HttpStatus.BAD_REQUEST, "카카오 정보를 가져오는데 실패했습니다."),
+    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "유효한 토큰이 아닙니다.");
     private final HttpStatus status;
     private final String message;
 }
