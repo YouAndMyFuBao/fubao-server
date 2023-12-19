@@ -59,7 +59,7 @@ public class JwtTokenProvider {
 
     public AuthTokens createAccessToken(Member member) {
         AuthTokens authTokens = AuthTokens.of(createToken(member.getId().toString()), createRefreshToken(member.getId().toString()));
-        redisUtil.setStringData(member.getId().toString(), authTokens.getRefreshToken(), Duration.ofDays(refreshTokenValidityInDay));
+        redisUtil.setStringData(authTokens.getRefreshToken(),authTokens.getAccessToken(), Duration.ofDays(refreshTokenValidityInDay));
         return authTokens;
     }
 
