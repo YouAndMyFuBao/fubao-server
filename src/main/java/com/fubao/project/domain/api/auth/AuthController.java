@@ -5,6 +5,7 @@ import com.fubao.project.domain.api.auth.dto.response.AuthTokens;
 import com.fubao.project.domain.service.OAuthLoginService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -21,5 +22,9 @@ public class AuthController {
     @PostMapping("/kakao")
     public ResponseEntity<AuthTokens> loginKakao(@Validated @RequestBody KakaoLoginRequest request) {
         return ResponseEntity.ok(oAuthLoginService.login(request));
+    }
+    @GetMapping("/kakao/code")
+    public ResponseEntity<String> code(@RequestParam String code) {
+        return ResponseEntity.ok(code);
     }
 }

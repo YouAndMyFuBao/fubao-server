@@ -5,8 +5,6 @@ import com.fubao.project.global.common.constant.OAuthProvider;
 import com.fubao.project.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
-import org.springframework.security.core.Authentication;
 
 import java.util.UUID;
 

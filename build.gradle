@@ -65,6 +65,20 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+def generated = 'src/main/generated'
+
+sourceSets {
+    main.java.srcDirs += [generated]
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.getGeneratedSourceOutputDirectory().set(file(generated))
+}
+
+clean.doLast {
+    file(generated).deleteDir()
+}
 task copyPrivate(type: Copy) {
     copy {
         from './fubao-server-secret'
