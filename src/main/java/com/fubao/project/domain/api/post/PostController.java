@@ -1,8 +1,11 @@
 package com.fubao.project.domain.api.post;
 
 import com.fubao.project.domain.api.post.dto.request.PostWriteRequest;
+import com.fubao.project.domain.api.post.dto.response.PostPatchResponse;
 import com.fubao.project.domain.api.post.dto.response.PostWriteResponse;
 import com.fubao.project.domain.service.PostService;
+import com.fubao.project.global.common.exception.CustomErrorCode;
+import com.fubao.project.global.common.exception.CustomException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -34,5 +37,17 @@ public class PostController {
         Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
         UUID memberId = UUID.fromString(loggedInUser.getName());
         return ResponseEntity.ok(postService.post(images, postWriteRequest, memberId));
+    }
+
+    @Operation(summary = "편지수정")
+    @PatchMapping(value = "/{postId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<PostPatchResponse> postPatch(@RequestPart(value = "image", required = false) MultipartFile image,
+                                                       @RequestPart(value = "data", required = false) @Validated PostWriteRequest postWriteRequest,
+                                                       @PathVariable Long postId) {
+        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        UUID memberId = UUID.fromString(loggedInUser.getName());
+        if ((image == null || image.isEmpty()) && postWriteRequest == null)
+            throw new CustomException(CustomErrorCode.PATCH_POST_CONTENT_NOT_EXIST);
+        return ResponseEntity.ok(postService.patch(image, postWriteRequest, memberId, postId));
     }
 }

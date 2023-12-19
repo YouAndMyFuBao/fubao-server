@@ -6,7 +6,6 @@ import com.fubao.project.global.util.RedisUtil;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -44,7 +43,7 @@ public class JwtTokenProvider {
     private final RedisUtil redisUtil;
 
     public JwtTokenProvider(
-            @Value("30") long accessTokenMinute,
+            @Value("10000") long accessTokenMinute,
             @Value("14") long refreshTokenDay,
             //랜덤 문자열 생성
             // https://www.random.org/strings/

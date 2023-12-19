@@ -38,3 +38,6 @@ out/
 
 ### sercret file ###
 src/main/resources
+
+### querydsl ###
+/src/main/generated/

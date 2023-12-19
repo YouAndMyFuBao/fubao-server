@@ -6,6 +6,7 @@ import com.fubao.project.domain.api.auth.dto.response.AuthTokens;
 import com.fubao.project.domain.service.OAuthLoginService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
