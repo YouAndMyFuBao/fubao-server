@@ -18,6 +18,7 @@ import javax.crypto.SecretKey;
 import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import static io.jsonwebtoken.Jwts.builder;
 
@@ -56,9 +57,9 @@ public class JwtTokenProvider {
         this.jwtParser = Jwts.parserBuilder().setSigningKey(secretKey).build();
     }
 
-    public AuthTokens createAccessToken(Member member) {
-        AuthTokens authTokens = AuthTokens.of(createToken(member.getId().toString()), createRefreshToken(member.getId().toString()));
-        redisUtil.setStringData(member.getId().toString(), authTokens.getRefreshToken(), Duration.ofDays(refreshTokenValidityInDay));
+    public AuthTokens createAccessToken(String id) {
+        AuthTokens authTokens = AuthTokens.of(createToken(id), createRefreshToken(id));
+        redisUtil.setStringData(authTokens.getRefreshToken(),authTokens.getAccessToken(), Duration.ofDays(refreshTokenValidityInDay));
         return authTokens;
     }
 
@@ -79,7 +80,7 @@ public class JwtTokenProvider {
                 .setSubject(username)
                 .claim(TOKEN_TYPE, REFRESH_TOKEN)
                 .setIssuedAt(Timestamp.valueOf(now))
-                .setExpiration(Timestamp.valueOf(now.minusDays(refreshTokenValidityInDay)))
+                .setExpiration(Timestamp.valueOf(now.plusDays(refreshTokenValidityInDay)))
                 .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -110,5 +111,8 @@ public class JwtTokenProvider {
         String usernameFromToken = jwtParser.parseClaimsJws(accessToken).getBody().getSubject();
         UserDetails userDetails = userDetailsService.loadUserByUsername(usernameFromToken);
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+    }
+    public String getUsernameFromRefreshToken(String refreshToken){
+        return jwtParser.parseClaimsJws(refreshToken).getBody().getSubject();
     }
 }

@@ -1,6 +1,7 @@
 package com.fubao.project.domain.api.auth;
 
 import com.fubao.project.domain.api.auth.dto.request.KakaoLoginRequest;
+import com.fubao.project.domain.api.auth.dto.request.TokenRegenerateRequest;
 import com.fubao.project.domain.api.auth.dto.response.AuthTokens;
 import com.fubao.project.domain.service.OAuthLoginService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,8 +24,10 @@ public class AuthController {
     public ResponseEntity<AuthTokens> loginKakao(@Validated @RequestBody KakaoLoginRequest request) {
         return ResponseEntity.ok(oAuthLoginService.login(request));
     }
-    @GetMapping("/kakao/code")
-    public ResponseEntity<String> code(@RequestParam String code) {
-        return ResponseEntity.ok(code);
+
+    @Operation(summary = "token 재발급")
+    @PostMapping("/refresh")
+    public ResponseEntity<AuthTokens> tokenRegenerate(@Validated @RequestBody TokenRegenerateRequest tokenRegenerateRequest) {
+        return ResponseEntity.ok(oAuthLoginService.tokenRegenerate(tokenRegenerateRequest));
     }
 }

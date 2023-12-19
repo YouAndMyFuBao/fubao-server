@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class AuthTokens {
-	@Schema(description = "access token")
-	private String accessToken;
-	@Schema(description = "refresh token")
-	private String refreshToken;
+    @Schema(description = "access token")
+    private String accessToken;
+    @Schema(description = "refresh token")
+    private String refreshToken;
 
-	public static AuthTokens of(String accessToken, String refreshToken) {
-		return new AuthTokens(accessToken, refreshToken);
-	}
+    public static AuthTokens of(String accessToken, String refreshToken) {
+        return new AuthTokens(accessToken, refreshToken);
+    }
 }

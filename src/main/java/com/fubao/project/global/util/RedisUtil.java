@@ -19,4 +19,14 @@ public class RedisUtil {
         ValueOperations<String,String> valueOperations = redisTemplate.opsForValue();
         valueOperations.set(key,value,expireTime);
     }
+    public boolean hasKey(String key) {
+        return Boolean.TRUE.equals(redisTemplate.hasKey(key));
+    }
+    public String getData(String key) {
+        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+        return valueOperations.get(key);
+    }
+    public void deleteData(String key) {
+        redisTemplate.delete(key);
+    }
 }
