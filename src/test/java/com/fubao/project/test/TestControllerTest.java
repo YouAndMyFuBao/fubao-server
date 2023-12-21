@@ -27,7 +27,7 @@ public class TestControllerTest {
     @Test
     @DisplayName("test 성공")
     void testSuccess() throws Exception {
-        String json = "TEST 입니다";
+        String json = "테스트 입니다.";
         mockMvc.perform(post("/api/test/success")
                         .contentType(APPLICATION_JSON)
                         .content(json)
