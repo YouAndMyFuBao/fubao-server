@@ -1,9 +1,8 @@
 package com.fubao.project.global.config.security.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fubao.project.global.common.exception.CustomErrorCode;
-import com.fubao.project.global.common.exception.CustomException;
-import com.fubao.project.global.common.exception.ErrorDTO;
+import com.fubao.project.global.common.exception.ResponseCode;
+import com.fubao.project.global.common.exception.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +29,6 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-        objectMapper.writeValue(response.getWriter(), ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorDTO(CustomErrorCode.UNAUTHORIZED)));
+        objectMapper.writeValue(response.getWriter(), ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorResponse.of(ResponseCode.UNAUTHORIZED)));
     }
 }

@@ -12,35 +12,37 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(CustomException.class)
-    protected ResponseEntity<String> handleCustomException(final CustomException e) {
+    protected ResponseEntity<ErrorResponse> handleCustomException(final CustomException e) {
         log.error("handleCustomException: {}", e.getResponseCode().toString());
-        final ErrorDTO errorDTO = new ErrorDTO(e.getResponseCode());
+        final ErrorResponse errorResponse = ErrorResponse.of(e.getResponseCode());
         return ResponseEntity
                 .status(e.getResponseCode().getStatus())
-                .body(errorDTO.getMessage());
+                .body(errorResponse);
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    protected ResponseEntity<String> handleHttpRequestMethodNotSupportedException(final HttpRequestMethodNotSupportedException e) {
+    protected ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedException(final HttpRequestMethodNotSupportedException e) {
         log.error("handleHttpRequestMethodNotSupportedException: {}", e.getMessage());
-        final ErrorDTO errorDTO = new ErrorDTO(CustomErrorCode.METHOD_NOT_ALLOWED);
+        final ErrorResponse errorResponse = ErrorResponse.of(ResponseCode.METHOD_NOT_ALLOWED);
         return ResponseEntity
-                .status(errorDTO.getHttpStatus())
-                .body(errorDTO.getMessage());
+                .status(ResponseCode.METHOD_NOT_ALLOWED.getStatus())
+                .body(errorResponse);
     }
 
     @ExceptionHandler(Exception.class)
-    protected ResponseEntity<String> handleException(final Exception e) {
+    protected ResponseEntity<ErrorResponse> handleException(final Exception e) {
         log.error("handleException: {}", e.getMessage());
-        final ErrorDTO errorDTO = new ErrorDTO(CustomErrorCode.INTERNAL_SERVER_ERROR);
+        final ErrorResponse errorResponse = ErrorResponse.of(ResponseCode.INTERNAL_SERVER_ERROR);
         return ResponseEntity
-                .status(errorDTO.getHttpStatus())
-                .body(errorDTO.getMessage());
+                .status(ResponseCode.INTERNAL_SERVER_ERROR.getStatus())
+                .body(errorResponse);
     }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<String> processValidationError(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ErrorResponse> processValidationError(MethodArgumentNotValidException ex) {
+        final ErrorResponse errorResponse = ErrorResponse.of(ResponseCode.INTERNAL_SERVER_ERROR, ex);
         return ResponseEntity
                 .status(ex.getStatusCode())
-                .body(ex.getBindingResult().getFieldError().getDefaultMessage());
+                .body(errorResponse);
     }
 }

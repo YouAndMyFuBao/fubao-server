@@ -1,5 +1,6 @@
 package com.fubao.project.domain.api.post.dto.request;
 
+import com.fubao.project.global.common.exception.ResponseCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

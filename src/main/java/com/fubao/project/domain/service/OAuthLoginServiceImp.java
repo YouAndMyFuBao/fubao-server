@@ -6,7 +6,7 @@ import com.fubao.project.domain.entity.Member;
 import com.fubao.project.domain.repository.MemberRepository;
 import com.fubao.project.domain.service.oauth.RequestOAuthInfoService;
 import com.fubao.project.global.common.constant.MemberRole;
-import com.fubao.project.global.common.exception.CustomErrorCode;
+import com.fubao.project.global.common.exception.ResponseCode;
 import com.fubao.project.global.common.exception.CustomException;
 import com.fubao.project.global.common.oauth.OAuthInfoResponse;
 import com.fubao.project.global.common.oauth.OAuthLoginParams;
@@ -42,7 +42,7 @@ public class OAuthLoginServiceImp implements OAuthLoginService {
     public AuthTokens tokenRegenerate(TokenRegenerateRequest tokenRegenerateRequest) {
         jwtTokenProvider.validateToken(tokenRegenerateRequest.getRefreshToken());
         if (!redisUtil.hasKey(tokenRegenerateRequest.getRefreshToken())) {
-            throw new CustomException(CustomErrorCode.INVALID_TOKEN);
+            throw new CustomException(ResponseCode.INVALID_TOKEN);
         }
         redisUtil.deleteData(tokenRegenerateRequest.getRefreshToken());
         String userName = jwtTokenProvider.getUsernameFromRefreshToken(tokenRegenerateRequest.getRefreshToken());
