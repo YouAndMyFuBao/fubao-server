@@ -1,6 +1,7 @@
 package com.fubao.project.domain.service;
 
 import com.fubao.project.domain.api.post.dto.request.PostWriteRequest;
+import com.fubao.project.domain.api.post.dto.response.PostGetResponse;
 import com.fubao.project.domain.api.post.dto.response.PostPatchResponse;
 import com.fubao.project.domain.api.post.dto.response.PostWriteResponse;
 import com.fubao.project.domain.entity.Member;
@@ -80,6 +81,15 @@ public class PostServiceImp implements PostService {
         }
 
         return new PostPatchResponse(postId);
+    }
+
+    @Override
+    public PostGetResponse get(Long postId) {
+        Post post = findPostById(postId);
+        return new PostGetResponse().builder()
+                .date(post.getCreatedAt())
+                .imageUrl(post.getImageUrl())
+                .content(post.getContent()).build();
     }
 
     private Post findPostById(Long postId) {
