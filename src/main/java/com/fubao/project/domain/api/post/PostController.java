@@ -1,6 +1,7 @@
 package com.fubao.project.domain.api.post;
 
 import com.fubao.project.domain.api.post.dto.request.PostWriteRequest;
+import com.fubao.project.domain.api.post.dto.response.PostGetResponse;
 import com.fubao.project.domain.api.post.dto.response.PostPatchResponse;
 import com.fubao.project.domain.api.post.dto.response.PostWriteResponse;
 import com.fubao.project.domain.service.PostService;
@@ -50,5 +51,10 @@ public class PostController {
         if ((image == null || image.isEmpty()) && postWriteRequest == null)
             throw new CustomException(ResponseCode.PATCH_POST_CONTENT_NOT_EXIST);
         return ResponseEntity.ok(DataResponse.of(postService.patch(image, postWriteRequest, memberId, postId)));
+    }
+    @Operation(summary = "편지 보기")
+    @GetMapping(value = "/{postId}")
+    public ResponseEntity<DataResponse<PostGetResponse>> postGet(@PathVariable Long postId) {
+        return ResponseEntity.ok(DataResponse.of(postService.get(postId)));
     }
 }
