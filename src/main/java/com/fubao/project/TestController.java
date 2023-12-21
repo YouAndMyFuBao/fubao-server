@@ -1,6 +1,6 @@
 package com.fubao.project;
 
-import com.fubao.project.global.common.exception.CustomErrorCode;
+import com.fubao.project.global.common.exception.ResponseCode;
 import com.fubao.project.global.common.exception.CustomException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,13 +22,13 @@ public class TestController {
     @PostMapping("/success")
     public ResponseEntity<String> testSuccess() {
         log.info("success test api");
-        return ResponseEntity.status(HttpStatus.OK).body(CustomErrorCode.TEST.getMessage());
+        return ResponseEntity.status(HttpStatus.OK).body("테스트 입니다.");
     }
 
     @Operation(summary = "test api fail")
     @PostMapping("/fail")
     public ResponseEntity<String> testFail() {
         log.info("fail test api");
-        throw new CustomException(CustomErrorCode.TEST);
+        throw new CustomException(ResponseCode.TEST);
     }
 }

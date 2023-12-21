@@ -8,7 +8,7 @@ import com.fubao.project.domain.entity.Post;
 import com.fubao.project.domain.repository.MemberRepository;
 import com.fubao.project.domain.repository.PostRepository;
 import com.fubao.project.domain.repository.PostCustomRepository;
-import com.fubao.project.global.common.exception.CustomErrorCode;
+import com.fubao.project.global.common.exception.ResponseCode;
 import com.fubao.project.global.common.exception.CustomException;
 import com.fubao.project.global.util.S3Util;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +46,7 @@ public class PostServiceImp implements PostService {
             save(post);
         } catch (Exception e) {
             deleteS3Image(imageUrl);
-            throw new CustomException(CustomErrorCode.INTERNAL_SERVER_ERROR);
+            throw new CustomException(ResponseCode.INTERNAL_SERVER_ERROR);
         }
         return new PostWriteResponse(post.getId());
     }
@@ -83,7 +83,7 @@ public class PostServiceImp implements PostService {
     }
 
     private Post findPostById(Long postId) {
-        return postRepository.findById(postId).orElseThrow(() -> new CustomException(CustomErrorCode.POST_NOT_FOUND));
+        return postRepository.findById(postId).orElseThrow(() -> new CustomException(ResponseCode.POST_NOT_FOUND));
     }
 
     private boolean existPost(Long postId) {
@@ -99,7 +99,7 @@ public class PostServiceImp implements PostService {
     }
 
     private Member findMember(UUID memberId) {
-        return memberRepository.findById(memberId).orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
+        return memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ResponseCode.USER_NOT_FOUND));
     }
 
     private void save(Post post) {

@@ -1,7 +1,7 @@
 package com.fubao.project.domain.service.oauth.kakao;
 
 import com.fubao.project.global.common.constant.OAuthProvider;
-import com.fubao.project.global.common.exception.CustomErrorCode;
+import com.fubao.project.global.common.exception.ResponseCode;
 import com.fubao.project.global.common.exception.CustomException;
 import com.fubao.project.global.common.oauth.OAuthApiClient;
 import com.fubao.project.global.common.oauth.OAuthInfoResponse;
@@ -51,11 +51,11 @@ public class KakaoApiClient implements OAuthApiClient {
         try {
             response = restTemplate.exchange(url, HttpMethod.POST, request, KakaoTokens.class);
         } catch (HttpClientErrorException e) {
-            throw new CustomException(CustomErrorCode.NOT_GET_KAKAO_INFO);
+            throw new CustomException(ResponseCode.NOT_GET_KAKAO_INFO);
         }
 
         if (response.getBody() == null) {
-            throw new CustomException(CustomErrorCode.NOT_GET_KAKAO_INFO);
+            throw new CustomException(ResponseCode.NOT_GET_KAKAO_INFO);
         }
 
         return response.getBody().getAccessToken();

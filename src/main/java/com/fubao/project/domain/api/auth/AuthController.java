@@ -4,6 +4,7 @@ import com.fubao.project.domain.api.auth.dto.request.KakaoLoginRequest;
 import com.fubao.project.domain.api.auth.dto.request.TokenRegenerateRequest;
 import com.fubao.project.domain.api.auth.dto.response.AuthTokens;
 import com.fubao.project.domain.service.OAuthLoginService;
+import com.fubao.project.global.common.response.DataResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Getter;
@@ -21,13 +22,13 @@ public class AuthController {
 
     @Operation(summary = "카카오 로그인/회원가입")
     @PostMapping("/kakao")
-    public ResponseEntity<AuthTokens> loginKakao(@Validated @RequestBody KakaoLoginRequest request) {
-        return ResponseEntity.ok(oAuthLoginService.login(request));
+    public ResponseEntity<DataResponse<AuthTokens>> loginKakao(@Validated @RequestBody KakaoLoginRequest request) {
+        return ResponseEntity.ok(DataResponse.of(oAuthLoginService.login(request)));
     }
 
     @Operation(summary = "token 재발급")
     @PostMapping("/refresh")
-    public ResponseEntity<AuthTokens> tokenRegenerate(@Validated @RequestBody TokenRegenerateRequest tokenRegenerateRequest) {
-        return ResponseEntity.ok(oAuthLoginService.tokenRegenerate(tokenRegenerateRequest));
+    public ResponseEntity<DataResponse<AuthTokens>> tokenRegenerate(@Validated @RequestBody TokenRegenerateRequest tokenRegenerateRequest) {
+        return ResponseEntity.ok(DataResponse.of(oAuthLoginService.tokenRegenerate(tokenRegenerateRequest)));
     }
 }
