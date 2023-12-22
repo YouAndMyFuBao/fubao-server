@@ -1,10 +1,7 @@
 package com.fubao.project.domain.service;
 
 import com.fubao.project.domain.api.post.dto.request.PostWriteRequest;
-import com.fubao.project.domain.api.post.dto.response.PostGetResponse;
-import com.fubao.project.domain.api.post.dto.response.PostMailBoxGetResponse;
-import com.fubao.project.domain.api.post.dto.response.PostPatchResponse;
-import com.fubao.project.domain.api.post.dto.response.PostWriteResponse;
+import com.fubao.project.domain.api.post.dto.response.*;
 import com.fubao.project.domain.entity.Member;
 import com.fubao.project.domain.entity.Post;
 import com.fubao.project.domain.repository.MemberRepository;
@@ -106,6 +103,18 @@ public class PostServiceImp implements PostService {
                         .content(post.getContent())
                         .imageUrl(post.getImageUrl())
                         .build()
+        ).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PostMyGetResponse> myPostGet(UUID memberId) {
+        Member member = findMember(memberId);
+        List<Post> myPostList = member.getPostList();
+        return myPostList.stream().map(
+                post -> PostMyGetResponse.builder()
+                        .content(post.getContent())
+                        .time(post.getCreatedAt())
+                        .imageUrl(post.getImageUrl()).build()
         ).collect(Collectors.toList());
     }
 
