@@ -1,4 +1,4 @@
-package com.fubao.project.global.config.security;
+package com.fubao.project.global.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

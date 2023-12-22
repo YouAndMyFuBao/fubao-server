@@ -2,6 +2,7 @@ package com.fubao.project.domain.service;
 
 import com.fubao.project.domain.api.post.dto.request.PostWriteRequest;
 import com.fubao.project.domain.api.post.dto.response.PostGetResponse;
+import com.fubao.project.domain.api.post.dto.response.PostMailBoxGetResponse;
 import com.fubao.project.domain.api.post.dto.response.PostPatchResponse;
 import com.fubao.project.domain.api.post.dto.response.PostWriteResponse;
 import com.fubao.project.domain.entity.Member;
@@ -14,12 +15,16 @@ import com.fubao.project.global.common.exception.CustomException;
 import com.fubao.project.global.util.S3Util;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -90,6 +95,18 @@ public class PostServiceImp implements PostService {
                 .date(post.getCreatedAt())
                 .imageUrl(post.getImageUrl())
                 .content(post.getContent()).build();
+    }
+
+    @Override
+    public List<PostMailBoxGetResponse> getMailBox(Pageable pageable) {
+        Page<Post> postList = postRepository.findAll(pageable);
+        return postList.stream().map(
+                post -> PostMailBoxGetResponse.builder()
+                        .time(post.getCreatedAt())
+                        .content(post.getContent())
+                        .imageUrl(post.getImageUrl())
+                        .build()
+        ).collect(Collectors.toList());
     }
 
     private Post findPostById(Long postId) {
