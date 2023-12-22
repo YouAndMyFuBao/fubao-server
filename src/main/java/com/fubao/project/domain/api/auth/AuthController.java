@@ -31,4 +31,9 @@ public class AuthController {
     public ResponseEntity<DataResponse<AuthTokens>> tokenRegenerate(@Validated @RequestBody TokenRegenerateRequest tokenRegenerateRequest) {
         return ResponseEntity.ok(DataResponse.of(oAuthLoginService.tokenRegenerate(tokenRegenerateRequest)));
     }
+
+    @GetMapping("/kakao/code")
+    public ResponseEntity<String> code(@RequestParam String code) {
+        return ResponseEntity.ok(code);
+    }
 }

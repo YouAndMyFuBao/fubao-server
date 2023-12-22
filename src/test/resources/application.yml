@@ -6,4 +6,5 @@ spring:
       - oauth
       - redis
       - s3
+      - security
     active: test

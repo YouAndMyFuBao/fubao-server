@@ -43,11 +43,9 @@ public class JwtTokenProvider {
     private final RedisUtil redisUtil;
 
     public JwtTokenProvider(
-            @Value("10000") long accessTokenMinute,
-            @Value("14") long refreshTokenDay,
-            //랜덤 문자열 생성
-            // https://www.random.org/strings/
-            @Value("3bWNO73XHugZHzVjVCy03cAqD91NQU6BJmTHAp1nrKXBpKfs0Soz00bkTnYE1DIwRRAGg592CdGZ5kj94xmZXw2nl") String secret,
+            @Value("${security.access-token-minute}") long accessTokenMinute,
+            @Value("${security.refresh-token-day}") long refreshTokenDay,
+            @Value("${security.code}") String secret,
             UserDetailsService userDetailsService, RedisUtil redisUtil) {
         this.secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
         this.accessTokenValidityInMinute = accessTokenMinute;
