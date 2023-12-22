@@ -1,10 +1,7 @@
 package com.fubao.project.domain.api.post;
 
 import com.fubao.project.domain.api.post.dto.request.PostWriteRequest;
-import com.fubao.project.domain.api.post.dto.response.PostGetResponse;
-import com.fubao.project.domain.api.post.dto.response.PostMailBoxGetResponse;
-import com.fubao.project.domain.api.post.dto.response.PostPatchResponse;
-import com.fubao.project.domain.api.post.dto.response.PostWriteResponse;
+import com.fubao.project.domain.api.post.dto.response.*;
 import com.fubao.project.domain.service.PostService;
 import com.fubao.project.global.common.exception.ResponseCode;
 import com.fubao.project.global.common.exception.CustomException;
@@ -13,7 +10,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +27,7 @@ import java.util.UUID;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/posts")
-@Tag(name = "coach", description = "코치 API")
+@Tag(name = "post", description = "편지 API")
 public class PostController {
     private final PostService postService;
 
@@ -66,7 +62,13 @@ public class PostController {
     @Operation(summary = "우체통")
     @GetMapping(value = "")
     public ResponseEntity<DataResponse<List<PostMailBoxGetResponse>>> postMailboxGet(Pageable pageable) {
-        log.info("Dd");
         return ResponseEntity.ok(DataResponse.of(postService.getMailBox(pageable)));
+    }
+    @Operation(summary = "내가 쓴편지 보기")
+    @GetMapping(value = "/my")
+    public ResponseEntity<DataResponse<List<PostMyGetResponse>>> myPostGet() {
+        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        UUID memberId = UUID.fromString(loggedInUser.getName());
+        return ResponseEntity.ok(DataResponse.of(postService.myPostGet(memberId)));
     }
 }

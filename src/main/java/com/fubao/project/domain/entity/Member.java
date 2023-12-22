@@ -6,6 +6,8 @@ import com.fubao.project.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -29,6 +31,9 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private MemberRole memberRole;
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    List<Post> postList = new ArrayList<>();
+
     public static Member of(
             UUID id, OAuthProvider oAuthProvider, String providerId, MemberRole memberRole
     ) {
@@ -41,10 +46,15 @@ public class Member extends BaseEntity {
     }
 
     @Builder
-    public Member(UUID id, OAuthProvider oAuthProvider, String providerId, MemberRole memberRole) {
+    public Member(UUID id, OAuthProvider oAuthProvider, String providerId, MemberRole memberRole, List<Post> postList) {
         this.id = id;
         this.oauthProvider = oAuthProvider;
         this.providerId = providerId;
         this.memberRole = memberRole;
+        if (postList.isEmpty()) {
+            this.postList = postList;
+        } else {
+            this.postList = null;
+        }
     }
 }
