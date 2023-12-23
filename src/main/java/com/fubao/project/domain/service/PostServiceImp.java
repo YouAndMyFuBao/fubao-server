@@ -57,15 +57,15 @@ public class PostServiceImp implements PostService {
     @Override
     @Transactional
     public PostPatchResponse patch(MultipartFile image, PostWriteRequest postWriteRequest, UUID memberId, Long postId) {
+        Post post = findPostById(postId);
         String imageUrl = null;
-        String prevImage = null;
+        String prevImage = post.getImageUrl();
+        if(!post.getMember().getId().equals(memberId))
+            throw new CustomException(ResponseCode.DO_NOT_PATCH_POST);
         if (image != null && !image.isEmpty()) {
             imageUrl = uploadS3Image(image);
         }
-        Post post;
         try {
-            post = findPostById(postId);
-            prevImage = post.getImageUrl();
             if (StringUtils.hasText(imageUrl))
                 post.updateImageUrl(imageUrl);
             if (postWriteRequest != null)
@@ -88,7 +88,7 @@ public class PostServiceImp implements PostService {
     @Override
     public PostGetResponse get(Long postId) {
         Post post = findPostById(postId);
-        return new PostGetResponse().builder()
+        return PostGetResponse.builder()
                 .date(post.getCreatedAt())
                 .imageUrl(post.getImageUrl())
                 .content(post.getContent()).build();

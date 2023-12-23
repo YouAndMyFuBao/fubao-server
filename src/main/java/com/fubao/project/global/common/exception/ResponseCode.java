@@ -22,6 +22,8 @@ public enum ResponseCode {
     //post
     FAILED_UPDATE_POST("POST-ERR-001", HttpStatus.INTERNAL_SERVER_ERROR, "업데이트에 실패했습니다."),
     PATCH_POST_CONTENT_NOT_EXIST("POST-ERR-002", HttpStatus.BAD_REQUEST, "변경할 게시물의 정보가 없습니다."),
+    DO_NOT_PATCH_POST("POST_ERR_003", HttpStatus.FORBIDDEN,"본인이 작성한 게시물만 수정할 수 있습니다." ),
+
     //GLOBAL
     BAD_REQUEST("GLB-ERR-001", HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
     METHOD_NOT_ALLOWED("GLB-ERR-002", HttpStatus.METHOD_NOT_ALLOWED, "허용되지 않은 메서드입니다."),
