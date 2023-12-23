@@ -19,4 +19,6 @@ public interface PostService {
     List<PostMailBoxGetResponse> getMailBox(Pageable pageable);
 
     List<PostMyGetResponse> myPostGet(UUID memberId);
+
+    byte[] getImage(Long postId);
 }

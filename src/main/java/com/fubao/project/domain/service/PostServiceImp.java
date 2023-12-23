@@ -118,6 +118,12 @@ public class PostServiceImp implements PostService {
         ).collect(Collectors.toList());
     }
 
+    @Override
+    public byte[] getImage(Long postId) {
+        Post post = findPostById(postId);
+        return s3Util.downloadS3Image(post.getImageUrl());
+    }
+
     private Post findPostById(Long postId) {
         return postRepository.findById(postId).orElseThrow(() -> new CustomException(ResponseCode.POST_NOT_FOUND));
     }
