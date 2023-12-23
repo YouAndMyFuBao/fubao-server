@@ -6,11 +6,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
-import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.model.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -86,4 +85,11 @@ public class S3Util {
         s3Client.deleteObject(deleteObjectRequest);
     }
 
+    public byte[] downloadS3Image(String imageUrl) {
+        GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+                .bucket(bucketName)
+                .key(imageUrl.substring(cloudFrontDistribution.length())).build();
+        ResponseBytes<GetObjectResponse> response = s3Client.getObjectAsBytes(getObjectRequest);
+        return response.asByteArray();
+    }
 }

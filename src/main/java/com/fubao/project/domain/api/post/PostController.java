@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -64,11 +65,20 @@ public class PostController {
     public ResponseEntity<DataResponse<List<PostMailBoxGetResponse>>> postMailboxGet(Pageable pageable) {
         return ResponseEntity.ok(DataResponse.of(postService.getMailBox(pageable)));
     }
+
     @Operation(summary = "내가 쓴편지 보기")
     @GetMapping(value = "/my")
     public ResponseEntity<DataResponse<List<PostMyGetResponse>>> myPostGet() {
         Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
         UUID memberId = UUID.fromString(loggedInUser.getName());
         return ResponseEntity.ok(DataResponse.of(postService.myPostGet(memberId)));
+    }
+
+    @Operation(summary = "편지 이미지 다운로드")
+    @GetMapping(value = "/{postId}/download")
+    public ResponseEntity<ByteArrayResource> getImage(@PathVariable Long postId) {
+        byte[] image = postService.getImage(postId);
+        ByteArrayResource byteArrayResource = new ByteArrayResource(image);
+        return ResponseEntity.ok(byteArrayResource);
     }
 }
