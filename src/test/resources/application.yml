@@ -7,4 +7,5 @@ spring:
       - redis
       - s3
       - security
+      - slack
     active: test
