@@ -5,7 +5,6 @@ import com.fubao.project.domain.api.post.dto.response.*;
 import com.fubao.project.domain.entity.Member;
 import com.fubao.project.domain.entity.Post;
 import com.fubao.project.domain.repository.MemberRepository;
-import com.fubao.project.domain.repository.PostCustomRepository;
 import com.fubao.project.domain.repository.PostRepository;
 import com.fubao.project.global.common.exception.ResponseCode;
 import com.fubao.project.global.common.exception.CustomException;
@@ -31,7 +30,6 @@ public class PostServiceImp implements PostService {
     private final static String DIR = "post";
     private final S3Util s3Util;
     private final PostRepository postRepository;
-    private final PostCustomRepository postCustomRepository;
     private final MemberRepository memberRepository;
 
     @Override
@@ -60,7 +58,7 @@ public class PostServiceImp implements PostService {
         Post post = findPostById(postId);
         String imageUrl = null;
         String prevImage = post.getImageUrl();
-        if(!post.getMember().getId().equals(memberId))
+        if (!post.getMember().getId().equals(memberId))
             throw new CustomException(ResponseCode.DO_NOT_PATCH_POST);
         if (image != null && !image.isEmpty()) {
             imageUrl = uploadS3Image(image);
@@ -99,7 +97,8 @@ public class PostServiceImp implements PostService {
         Page<Post> postList = postRepository.findAll(pageable);
         return postList.stream().map(
                 post -> PostMailBoxGetResponse.builder()
-                        .time(post.getCreatedAt())
+                        .postId(post.getId())
+                        .date(post.getCreatedAt())
                         .content(post.getContent())
                         .imageUrl(post.getImageUrl())
                         .build()
@@ -112,8 +111,9 @@ public class PostServiceImp implements PostService {
         List<Post> myPostList = member.getPostList();
         return myPostList.stream().map(
                 post -> PostMyGetResponse.builder()
+                        .postId(post.getId())
                         .content(post.getContent())
-                        .time(post.getCreatedAt())
+                        .date(post.getCreatedAt())
                         .imageUrl(post.getImageUrl()).build()
         ).collect(Collectors.toList());
     }
