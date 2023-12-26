@@ -1,8 +1,10 @@
 package com.fubao.project.domain.entity;
 
 import com.fubao.project.global.common.entity.BaseEntity;
+import com.fubao.project.global.common.constant.State;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Where;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -10,6 +12,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "post")
+@Where(clause = "state = 'A'")
 public class Post extends BaseEntity {
     @Id()
     @GeneratedValue(strategy = IDENTITY)
@@ -26,20 +29,26 @@ public class Post extends BaseEntity {
     @Column(name = "content")
     private String content;
 
+    @Column(name = "state")
+    @Enumerated(EnumType.STRING)
+    private State state;
+
     public static Post of(
-            Long id, Member member, String imageUrl, String content
+            Long id, Member member, String imageUrl, String content, State state
     ) {
         return Post.builder()
                 .id(id)
                 .member(member)
                 .imageUrl(imageUrl)
                 .content(content)
+                .state(state)
                 .build();
     }
 
     @Builder
-    public Post(Long id, Member member, String imageUrl, String content) {
+    public Post(Long id, Member member, String imageUrl, String content, State state) {
         this.id = id;
+        this.state = state;
         this.member = member;
         this.imageUrl = imageUrl;
         this.content = content;
