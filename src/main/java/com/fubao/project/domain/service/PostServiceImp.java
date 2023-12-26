@@ -9,6 +9,7 @@ import com.fubao.project.domain.repository.PostRepository;
 import com.fubao.project.global.common.constant.State;
 import com.fubao.project.global.common.exception.ResponseCode;
 import com.fubao.project.global.common.exception.CustomException;
+import com.fubao.project.global.util.DateUtil;
 import com.fubao.project.global.util.S3Util;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -32,6 +35,7 @@ public class PostServiceImp implements PostService {
     private final S3Util s3Util;
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
+    private final DateUtil dateUtil;
 
     @Override
     @Transactional
@@ -95,29 +99,30 @@ public class PostServiceImp implements PostService {
     }
 
     @Override
-    public List<PostMailBoxGetResponse> getMailBox(Pageable pageable) {
+    public Page<PostMailBoxGetResponse> getMailBox(Pageable pageable) {
         Page<Post> postList = postRepository.findAll(pageable);
-        return postList.stream().map(
+        return postList.map(
                 post -> PostMailBoxGetResponse.builder()
                         .postId(post.getId())
-                        .date(post.getCreatedAt())
                         .content(post.getContent())
-                        .imageUrl(post.getImageUrl())
-                        .build()
-        ).collect(Collectors.toList());
+                        .date(dateUtil.dateFormatToPost(post.getCreatedAt()))
+                        .imageUrl(post.getImageUrl()).build()
+        );
     }
 
     @Override
     public List<PostMyGetResponse> myPostGet(UUID memberId) {
         Member member = findMember(memberId);
         List<Post> myPostList = member.getPostList();
-        return myPostList.stream().map(
+        List<PostMyGetResponse> postMyGetResponseList = myPostList.stream().map(
                 post -> PostMyGetResponse.builder()
                         .postId(post.getId())
                         .content(post.getContent())
-                        .date(post.getCreatedAt())
+                        .date(dateUtil.dateFormatToPost(post.getCreatedAt()))
                         .imageUrl(post.getImageUrl()).build()
         ).collect(Collectors.toList());
+        Collections.reverse(postMyGetResponseList);
+        return postMyGetResponseList;
     }
 
     @Override

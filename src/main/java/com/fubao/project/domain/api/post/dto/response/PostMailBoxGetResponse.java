@@ -22,13 +22,7 @@ public class PostMailBoxGetResponse {
     private String imageUrl;
     @Schema(description = "게시글 내용", example = "hiii222")
     private String content;
-    @Schema(description = "게시글 생성일", example = "2023-12-20T02:08:50")
-    private LocalDateTime date;
+    @Schema(description = "게시글 생성일", example = "한 시간 전 -> 분 단위\n" + "한 시간 이상 -> 시간 단위\n" + "업로드 한 날짜 지나면 -> 하루 단위")
+    private String date;
 
-    public PostMailBoxGetResponse(Post post) {
-        this.postId = post.getId();
-        this.imageUrl = post.getImageUrl();
-        this.content = post.getContent();
-        this.date = post.getCreatedAt();
-    }
 }

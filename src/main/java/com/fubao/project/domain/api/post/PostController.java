@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -71,7 +72,7 @@ public class PostController {
 
     @Operation(summary = "우체통")
     @GetMapping(value = "")
-    public ResponseEntity<DataResponse<List<PostMailBoxGetResponse>>> postMailboxGet(Pageable pageable) {
+    public ResponseEntity<DataResponse<Page<PostMailBoxGetResponse>>> postMailboxGet(Pageable pageable) {
         return ResponseEntity.ok(DataResponse.of(postService.getMailBox(pageable)));
     }
 
