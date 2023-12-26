@@ -16,7 +16,7 @@ public interface PostService {
 
     PostGetResponse get(Long postId);
 
-    List<PostMailBoxGetResponse> getMailBox(Pageable pageable);
+    Page<PostMailBoxGetResponse> getMailBox(Pageable pageable);
 
     List<PostMyGetResponse> myPostGet(UUID memberId);
 
