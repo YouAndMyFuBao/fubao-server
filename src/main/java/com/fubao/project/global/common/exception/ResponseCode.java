@@ -18,11 +18,11 @@ public enum ResponseCode {
     //member
     USER_NOT_FOUND("MEM-ERR-001", HttpStatus.NOT_FOUND, "존재하지 않는 유저입니다."),
     NOT_GET_KAKAO_INFO("MEM-ERR-002", HttpStatus.BAD_REQUEST, "카카오 정보를 가져오는데 실패했습니다."),
-    POST_NOT_FOUND("MEM-ERR-003", HttpStatus.NOT_FOUND, "존재하지 않는 편지입니다."),
     //post
     FAILED_UPDATE_POST("POST-ERR-001", HttpStatus.INTERNAL_SERVER_ERROR, "업데이트에 실패했습니다."),
-    PATCH_POST_CONTENT_NOT_EXIST("POST-ERR-002", HttpStatus.BAD_REQUEST, "변경할 게시물의 정보가 없습니다."),
-    DO_NOT_PATCH_POST("POST_ERR_003", HttpStatus.FORBIDDEN,"본인이 작성한 게시물만 수정할 수 있습니다." ),
+    PATCH_POST_CONTENT_NOT_EXIST("POST-ERR-002", HttpStatus.BAD_REQUEST, "변경할 편지의 정보가 없습니다."),
+    DO_NOT_PATCH_POST("POST_ERR_003", HttpStatus.FORBIDDEN,"본인이 작성한 편지만 수정할 수 있습니다." ),
+    POST_NOT_FOUND("POST-ERR-004", HttpStatus.NOT_FOUND, "존재하지 않는 편지입니다."),
 
     //GLOBAL
     BAD_REQUEST("GLB-ERR-001", HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),

@@ -66,4 +66,8 @@ public class Member extends BaseEntity {
             this.postList = null;
         }
     }
+
+    public void deactivation() {
+        this.state = State.D;
+    }
 }

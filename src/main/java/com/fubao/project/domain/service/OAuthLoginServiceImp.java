@@ -4,7 +4,9 @@ import com.fubao.project.domain.api.auth.dto.request.LogoutRequest;
 import com.fubao.project.domain.api.auth.dto.request.TokenRegenerateRequest;
 import com.fubao.project.domain.api.auth.dto.response.AuthTokens;
 import com.fubao.project.domain.entity.Member;
+import com.fubao.project.domain.entity.Post;
 import com.fubao.project.domain.repository.MemberRepository;
+import com.fubao.project.domain.repository.PostRepository;
 import com.fubao.project.domain.service.oauth.RequestOAuthInfoService;
 import com.fubao.project.global.common.constant.MemberRole;
 import com.fubao.project.global.common.constant.State;
@@ -19,7 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -54,6 +58,20 @@ public class OAuthLoginServiceImp implements OAuthLoginService {
     @Override
     public void logout(LogoutRequest logoutRequest) {
         redisUtil.deleteData(logoutRequest.getRefreshToken());
+    }
+
+    @Override
+    public void deactivation(UUID memberId) {
+        Member member = findById(memberId);
+        List<Post> postList = member.getPostList();
+        postList.forEach(
+                Post::deactivation
+        );
+        member.deactivation();
+    }
+
+    private Member findById(UUID memberId) {
+        return memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ResponseCode.USER_NOT_FOUND));
     }
 
 

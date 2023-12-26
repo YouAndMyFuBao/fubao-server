@@ -6,14 +6,21 @@ import com.fubao.project.domain.api.auth.dto.request.TokenRegenerateRequest;
 import com.fubao.project.domain.api.auth.dto.response.AuthTokens;
 import com.fubao.project.domain.service.OAuthLoginService;
 import com.fubao.project.global.common.api.CustomResponseCode;
+import com.fubao.project.global.common.exception.CustomException;
+import com.fubao.project.global.common.exception.ResponseCode;
 import com.fubao.project.global.common.response.DataResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @Tag(name = "소셜 인증", description = "소셜 API 명세서")
 @RestController
@@ -39,6 +46,18 @@ public class AuthController {
     public ResponseEntity<DataResponse<CustomResponseCode>> logout(@Validated @RequestBody LogoutRequest logoutRequest) {
         oAuthLoginService.logout(logoutRequest);
         return ResponseEntity.ok(DataResponse.of(CustomResponseCode.MEMBER_LOGOUT));
+    }
+
+    @Operation(summary = "회원탈퇴")
+    @DeleteMapping("/deactivation")
+    public ResponseEntity<DataResponse<CustomResponseCode>> deactivation() {
+        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        if (loggedInUser instanceof AnonymousAuthenticationToken) {
+            throw new CustomException(ResponseCode.UNAUTHORIZED);
+        }
+        UUID memberId = UUID.fromString(loggedInUser.getName());
+        oAuthLoginService.deactivation(memberId);
+        return ResponseEntity.ok(DataResponse.of(CustomResponseCode.MEMBER_DEACTIVATION));
     }
 
 
