@@ -14,12 +14,15 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,6 +41,9 @@ public class PostController {
                                                                      @RequestPart(value = "data") @Validated PostWriteRequest postWriteRequest
     ) {
         Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        if (loggedInUser instanceof AnonymousAuthenticationToken) {
+            throw new CustomException(ResponseCode.UNAUTHORIZED);
+        }
         UUID memberId = UUID.fromString(loggedInUser.getName());
         return ResponseEntity.ok(DataResponse.of(postService.post(images, postWriteRequest, memberId)));
     }
@@ -48,6 +54,9 @@ public class PostController {
                                                                      @RequestPart(value = "data", required = false) @Validated PostWriteRequest postWriteRequest,
                                                                      @PathVariable Long postId) {
         Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        if (loggedInUser instanceof AnonymousAuthenticationToken) {
+            throw new CustomException(ResponseCode.UNAUTHORIZED);
+        }
         UUID memberId = UUID.fromString(loggedInUser.getName());
         if ((image == null || image.isEmpty()) && postWriteRequest == null)
             throw new CustomException(ResponseCode.PATCH_POST_CONTENT_NOT_EXIST);
@@ -70,6 +79,9 @@ public class PostController {
     @GetMapping(value = "/my")
     public ResponseEntity<DataResponse<List<PostMyGetResponse>>> myPostGet() {
         Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        if (loggedInUser instanceof AnonymousAuthenticationToken) {
+            throw new CustomException(ResponseCode.UNAUTHORIZED);
+        }
         UUID memberId = UUID.fromString(loggedInUser.getName());
         return ResponseEntity.ok(DataResponse.of(postService.myPostGet(memberId)));
     }
