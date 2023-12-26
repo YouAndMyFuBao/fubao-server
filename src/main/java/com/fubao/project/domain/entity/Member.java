@@ -2,6 +2,7 @@ package com.fubao.project.domain.entity;
 
 import com.fubao.project.global.common.constant.MemberRole;
 import com.fubao.project.global.common.constant.OAuthProvider;
+import com.fubao.project.global.common.constant.State;
 import com.fubao.project.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -30,6 +31,10 @@ public class Member extends BaseEntity {
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private MemberRole memberRole;
+
+    @Column(name = "state")
+    @Enumerated(EnumType.STRING)
+    private State state;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     List<Post> postList = new ArrayList<>();
