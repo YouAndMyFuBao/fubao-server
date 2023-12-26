@@ -24,7 +24,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) {
         Optional<Member> member = memberRepository.findById(UUID.fromString(username));
         return User.withUsername(username)
-                .password(member.get().getId().toString())
+                .password(UUID.randomUUID().toString())
                 .authorities(AuthorityUtils.NO_AUTHORITIES)
                 .build();
     }
