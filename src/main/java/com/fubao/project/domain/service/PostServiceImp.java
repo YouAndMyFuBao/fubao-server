@@ -6,6 +6,7 @@ import com.fubao.project.domain.entity.Member;
 import com.fubao.project.domain.entity.Post;
 import com.fubao.project.domain.repository.MemberRepository;
 import com.fubao.project.domain.repository.PostRepository;
+import com.fubao.project.global.common.constant.State;
 import com.fubao.project.global.common.exception.ResponseCode;
 import com.fubao.project.global.common.exception.CustomException;
 import com.fubao.project.global.util.S3Util;
@@ -42,6 +43,7 @@ public class PostServiceImp implements PostService {
             post = Post.builder()
                     .content(postWriteRequest.getContent())
                     .member(member)
+                    .state(State.A)
                     .imageUrl(imageUrl).build();
 
             save(post);
@@ -126,10 +128,6 @@ public class PostServiceImp implements PostService {
 
     private Post findPostById(Long postId) {
         return postRepository.findById(postId).orElseThrow(() -> new CustomException(ResponseCode.POST_NOT_FOUND));
-    }
-
-    private boolean existPost(Long postId) {
-        return postRepository.existsById(postId);
     }
 
     private String uploadS3Image(MultipartFile images) {

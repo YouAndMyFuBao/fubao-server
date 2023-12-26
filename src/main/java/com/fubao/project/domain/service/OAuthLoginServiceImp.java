@@ -6,6 +6,7 @@ import com.fubao.project.domain.entity.Member;
 import com.fubao.project.domain.repository.MemberRepository;
 import com.fubao.project.domain.service.oauth.RequestOAuthInfoService;
 import com.fubao.project.global.common.constant.MemberRole;
+import com.fubao.project.global.common.constant.State;
 import com.fubao.project.global.common.exception.ResponseCode;
 import com.fubao.project.global.common.exception.CustomException;
 import com.fubao.project.global.common.oauth.OAuthInfoResponse;
@@ -61,6 +62,7 @@ public class OAuthLoginServiceImp implements OAuthLoginService {
                 .oAuthProvider(oAuthInfoResponse.getOAuthProvider())
                 .providerId(oAuthInfoResponse.getProviderId())
                 .memberRole(MemberRole.MEMBER)
+                .state(State.A)
                 .build();
         return memberRepository.save(member);
     }

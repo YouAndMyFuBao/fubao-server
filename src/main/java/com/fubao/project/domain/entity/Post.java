@@ -4,6 +4,7 @@ import com.fubao.project.global.common.entity.BaseEntity;
 import com.fubao.project.global.common.constant.State;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Where;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -11,6 +12,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "post")
+@Where(clause = "state = 'A'")
 public class Post extends BaseEntity {
     @Id()
     @GeneratedValue(strategy = IDENTITY)
