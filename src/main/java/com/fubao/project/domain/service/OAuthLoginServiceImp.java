@@ -1,5 +1,6 @@
 package com.fubao.project.domain.service;
 
+import com.fubao.project.domain.api.auth.dto.request.LogoutRequest;
 import com.fubao.project.domain.api.auth.dto.request.TokenRegenerateRequest;
 import com.fubao.project.domain.api.auth.dto.response.AuthTokens;
 import com.fubao.project.domain.entity.Member;
@@ -48,6 +49,11 @@ public class OAuthLoginServiceImp implements OAuthLoginService {
         redisUtil.deleteData(tokenRegenerateRequest.getRefreshToken());
         String userName = jwtTokenProvider.getUsernameFromRefreshToken(tokenRegenerateRequest.getRefreshToken());
         return jwtTokenProvider.createAccessToken(userName);
+    }
+
+    @Override
+    public void logout(LogoutRequest logoutRequest) {
+        redisUtil.deleteData(logoutRequest.getRefreshToken());
     }
 
 

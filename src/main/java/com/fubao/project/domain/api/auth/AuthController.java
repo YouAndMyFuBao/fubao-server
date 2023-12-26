@@ -1,9 +1,11 @@
 package com.fubao.project.domain.api.auth;
 
 import com.fubao.project.domain.api.auth.dto.request.KakaoLoginRequest;
+import com.fubao.project.domain.api.auth.dto.request.LogoutRequest;
 import com.fubao.project.domain.api.auth.dto.request.TokenRegenerateRequest;
 import com.fubao.project.domain.api.auth.dto.response.AuthTokens;
 import com.fubao.project.domain.service.OAuthLoginService;
+import com.fubao.project.global.common.api.CustomResponseCode;
 import com.fubao.project.global.common.response.DataResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,6 +33,14 @@ public class AuthController {
     public ResponseEntity<DataResponse<AuthTokens>> tokenRegenerate(@Validated @RequestBody TokenRegenerateRequest tokenRegenerateRequest) {
         return ResponseEntity.ok(DataResponse.of(oAuthLoginService.tokenRegenerate(tokenRegenerateRequest)));
     }
+
+    @Operation(summary = "로그아웃")
+    @PostMapping("/logout")
+    public ResponseEntity<DataResponse<CustomResponseCode>> logout(@Validated @RequestBody LogoutRequest logoutRequest) {
+        oAuthLoginService.logout(logoutRequest);
+        return ResponseEntity.ok(DataResponse.of(CustomResponseCode.MEMBER_LOGOUT));
+    }
+
 
     @GetMapping("/kakao/code")
     public ResponseEntity<String> code(@RequestParam String code) {
