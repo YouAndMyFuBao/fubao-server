@@ -21,7 +21,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -129,6 +128,14 @@ public class PostServiceImp implements PostService {
     public byte[] getImage(Long postId) {
         Post post = findPostById(postId);
         return s3Util.downloadS3Image(post.getImageUrl());
+    }
+
+    @Override
+    public void deletePost(Long postId, UUID memberId) {
+        Post post = findPostById(postId);
+        if (!post.getMember().getId().equals(memberId))
+            throw new CustomException(ResponseCode.DO_NOT_DELETE_POST);
+        post.delete();
     }
 
     private Post findPostById(Long postId) {

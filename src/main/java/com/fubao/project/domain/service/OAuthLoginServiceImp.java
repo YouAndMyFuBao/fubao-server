@@ -65,7 +65,7 @@ public class OAuthLoginServiceImp implements OAuthLoginService {
         Member member = findById(memberId);
         List<Post> postList = member.getPostList();
         postList.forEach(
-                Post::deactivation
+                Post::delete
         );
         member.deactivation();
     }

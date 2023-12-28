@@ -3,6 +3,7 @@ package com.fubao.project.domain.api.post;
 import com.fubao.project.domain.api.post.dto.request.PostWriteRequest;
 import com.fubao.project.domain.api.post.dto.response.*;
 import com.fubao.project.domain.service.PostService;
+import com.fubao.project.global.common.api.CustomResponseCode;
 import com.fubao.project.global.common.exception.ResponseCode;
 import com.fubao.project.global.common.exception.CustomException;
 import com.fubao.project.global.common.response.DataResponse;
@@ -93,5 +94,17 @@ public class PostController {
         byte[] image = postService.getImage(postId);
         ByteArrayResource byteArrayResource = new ByteArrayResource(image);
         return ResponseEntity.ok(byteArrayResource);
+    }
+
+    @Operation(summary = "편지 삭제")
+    @DeleteMapping(value = "/{postId}")
+    public ResponseEntity<DataResponse<CustomResponseCode>> deletePost(@PathVariable Long postId) {
+        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        if (loggedInUser instanceof AnonymousAuthenticationToken) {
+            throw new CustomException(ResponseCode.UNAUTHORIZED);
+        }
+        UUID memberId = UUID.fromString(loggedInUser.getName());
+        postService.deletePost(postId,memberId);
+        return ResponseEntity.ok(DataResponse.of(CustomResponseCode.POST_DELETE));
     }
 }

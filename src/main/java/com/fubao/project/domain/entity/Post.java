@@ -62,7 +62,7 @@ public class Post extends BaseEntity {
         this.content = content;
     }
 
-    public void deactivation() {
+    public void delete() {
         this.state = State.D;
     }
 }
