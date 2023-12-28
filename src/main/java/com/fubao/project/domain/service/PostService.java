@@ -21,4 +21,6 @@ public interface PostService {
     List<PostMyGetResponse> myPostGet(UUID memberId);
 
     byte[] getImage(Long postId);
+
+    void deletePost(Long postId, UUID memberId);
 }
