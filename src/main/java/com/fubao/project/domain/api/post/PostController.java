@@ -113,4 +113,9 @@ public class PostController {
         postService.addFubaoLove();
         return ResponseEntity.ok(DataResponse.of(CustomResponseCode.FUBAO_LOVE_ADD));
     }
+    @Operation(summary = "푸바오받은 사랑")
+    @GetMapping(value = "/fubao/love")
+    public ResponseEntity<DataResponse<PostGetFubaoLoveResponse>> getFubaoLove() {
+        return ResponseEntity.ok(DataResponse.of(postService.getFubaoLove()));
+    }
 }

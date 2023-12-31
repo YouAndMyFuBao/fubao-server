@@ -151,6 +151,17 @@ public class PostServiceImp implements PostService {
         addFubaoLove(1L);
     }
 
+    @Override
+    @Transactional
+    public PostGetFubaoLoveResponse getFubaoLove() {
+        FubaoLove fubaoLove = fubaoLoveRepository.getReferenceById(1L);
+        if (!redisUtil.hasKey(FUBAO_LOVE)) {
+            redisUtil.setStringData(FUBAO_LOVE, String.valueOf(fubaoLove.getLove()), Duration.ofHours(6));
+            return new PostGetFubaoLoveResponse(fubaoLove.getLove());
+        }
+        return new PostGetFubaoLoveResponse(Long.valueOf(redisUtil.getData(FUBAO_LOVE)));
+    }
+
     private Post findPostById(Long postId) {
         return postRepository.findById(postId).orElseThrow(() -> new CustomException(ResponseCode.POST_NOT_FOUND));
     }
