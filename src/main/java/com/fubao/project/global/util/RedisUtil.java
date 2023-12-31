@@ -2,11 +2,9 @@ package com.fubao.project.global.util;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 
@@ -28,5 +26,10 @@ public class RedisUtil {
     }
     public void deleteData(String key) {
         redisTemplate.delete(key);
+    }
+
+    public void incrementValue(String key, Long love) {
+        ValueOperations<String, String> ops = redisTemplate.opsForValue();
+        ops.increment(key,love);
     }
 }
