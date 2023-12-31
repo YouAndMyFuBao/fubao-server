@@ -25,4 +25,6 @@ public interface PostService {
     void deletePost(Long postId, UUID memberId);
 
     void addFubaoLove();
+
+    PostGetFubaoLoveResponse getFubaoLove();
 }
