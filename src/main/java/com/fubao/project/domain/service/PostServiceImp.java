@@ -163,11 +163,21 @@ public class PostServiceImp implements PostService {
     }
 
     private void addFubaoLove(Long love) {
+        FubaoLove fubaoLove = fubaoLoveRepository.getReferenceById(1L);
         if (!redisUtil.hasKey(FUBAO_LOVE)) {
-            FubaoLove fubaoLove = fubaoLoveRepository.getReferenceById(1L);
             redisUtil.setStringData(FUBAO_LOVE, String.valueOf(fubaoLove.getLove()), Duration.ofHours(6));
         }
         redisUtil.incrementValue(FUBAO_LOVE, love);
+    }
+
+    @Scheduled(fixedDelay = 1000 * 60 * 60)
+    @Transactional
+    protected void updateLove() {
+        FubaoLove fubaoLove = fubaoLoveRepository.getReferenceById(1L);
+        if (redisUtil.hasKey(FUBAO_LOVE)) {
+            Long love = Long.valueOf(redisUtil.getData(FUBAO_LOVE));
+            fubaoLove.updateLove(love);
+        }
     }
 
     private void save(Post post) {
