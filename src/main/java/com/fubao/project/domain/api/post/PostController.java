@@ -107,4 +107,10 @@ public class PostController {
         postService.deletePost(postId,memberId);
         return ResponseEntity.ok(DataResponse.of(CustomResponseCode.POST_DELETE));
     }
+    @Operation(summary = "푸바오에게 사랑보내기")
+    @PostMapping(value = "/fubao/love")
+    public ResponseEntity<DataResponse<CustomResponseCode>> postFubaoLove() {
+        postService.addFubaoLove();
+        return ResponseEntity.ok(DataResponse.of(CustomResponseCode.FUBAO_LOVE_ADD));
+    }
 }

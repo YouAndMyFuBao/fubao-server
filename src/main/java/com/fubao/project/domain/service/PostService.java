@@ -23,4 +23,6 @@ public interface PostService {
     byte[] getImage(Long postId);
 
     void deletePost(Long postId, UUID memberId);
+
+    void addFubaoLove();
 }
