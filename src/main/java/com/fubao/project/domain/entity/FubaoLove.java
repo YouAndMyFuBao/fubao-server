@@ -1,4 +1,5 @@
 package com.fubao.project.domain.entity;
+
 import com.fubao.project.global.common.constant.MemberRole;
 import com.fubao.project.global.common.constant.OAuthProvider;
 import com.fubao.project.global.common.constant.State;
@@ -22,6 +23,7 @@ public class FubaoLove {
     long love;
 
     public void updateLove(Long love) {
-        this.love = love;
+        if (this.love < love)
+            this.love = love;
     }
 }

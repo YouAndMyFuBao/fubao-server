@@ -1,14 +1,15 @@
 package com.fubao.project.global.common.response;
 
+import com.fubao.project.global.common.api.CustomResponseCode;
 import com.fubao.project.global.common.exception.ResponseCode;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 @Getter
-
-public class DataResponse<T> extends  ResponseDto{
+public class DataResponse<T> extends ResponseDto {
 
     private final Object data;
+
     private DataResponse(Object data) {
         super(true, ResponseCode.OK.getCode(), ResponseCode.OK.getMessage());
         this.data = data;
@@ -20,14 +21,16 @@ public class DataResponse<T> extends  ResponseDto{
     }
 
     public static <T> DataResponse<T> of(T data) {
-        if (data instanceof String) {
+        if (data instanceof CustomResponseCode) {
+            return new DataResponse<>(new MessageResponse(((CustomResponseCode) data).getMessage()));
+        } else if (data instanceof String) {
             return new DataResponse<>(new MessageResponse((String) data));
         } else {
             return new DataResponse<>(data);
         }
     }
+
     @Getter
-    @Slf4j
     private static class MessageResponse {
 
         private final String message;

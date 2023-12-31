@@ -146,6 +146,11 @@ public class PostServiceImp implements PostService {
         post.delete();
     }
 
+    @Override
+    public void addFubaoLove() {
+        addFubaoLove(1L);
+    }
+
     private Post findPostById(Long postId) {
         return postRepository.findById(postId).orElseThrow(() -> new CustomException(ResponseCode.POST_NOT_FOUND));
     }
