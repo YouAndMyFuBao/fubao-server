@@ -68,6 +68,7 @@ public class OAuthLoginServiceImp implements OAuthLoginService {
                 Post::delete
         );
         member.deactivation();
+        requestOAuthInfoService.disconnect(member.getOauthProvider(),member.getProviderId());
     }
 
     private Member findById(UUID memberId) {

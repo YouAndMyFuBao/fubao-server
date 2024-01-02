@@ -28,7 +28,8 @@ public class KakaoApiClient implements OAuthApiClient {
 
     @Value("${oauth.kakao.client-id}")
     private String clientId;
-
+    @Value("${oauth.kakao.admin-key}")
+    private String adminKey;
     private final RestTemplate restTemplate;
 
     @Override
@@ -75,5 +76,18 @@ public class KakaoApiClient implements OAuthApiClient {
         HttpEntity<?> request = new HttpEntity<>(body, httpHeaders);
 
         return restTemplate.postForObject(url, request, KakaoInfoResponse.class);
+    }
+
+    @Override
+    public void disconnect(String providerId) {
+        String url = apiUrl + "/v1/user/unlink";
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        httpHeaders.set("Authorization", "KakaoAK " + adminKey);
+        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+        body.add("target_id_type", "user_id");
+        body.add("target_id", providerId);
+        HttpEntity<?> request = new HttpEntity<>(body, httpHeaders);
+        restTemplate.exchange(url, HttpMethod.POST, request, String.class);
     }
 }
