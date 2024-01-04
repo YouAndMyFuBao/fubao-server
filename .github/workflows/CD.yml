@@ -20,6 +20,16 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+      - name: Get current time
+        uses: 1466587594/get-current-time@v2
+        id: current-time
+        with:
+          format: YYYY-MM-DDTHH-mm-ss
+          utcOffset: "+09:00"
+
+      - name: Show Current Time
+        run: echo "CurrentTime=$"
+        shell: bash
 
       - name: Gradle Caching
         uses: actions/cache@v3
