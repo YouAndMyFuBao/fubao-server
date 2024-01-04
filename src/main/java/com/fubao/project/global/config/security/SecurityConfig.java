@@ -52,6 +52,7 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(PERMITTED_URLS.toArray(new String[0])).permitAll() // 해당 url의 경우 검사하지 않음
+                        .requestMatchers(HttpMethod.GET,"/").permitAll()
                         .anyRequest().authenticated() // 모든 request는 검증
                 );
         return http.build();
