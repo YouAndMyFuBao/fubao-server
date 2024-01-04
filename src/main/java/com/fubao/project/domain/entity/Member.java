@@ -60,11 +60,7 @@ public class Member extends BaseEntity {
         this.providerId = providerId;
         this.memberRole = memberRole;
         this.state = state;
-        if (postList.isEmpty()) {
-            this.postList = postList;
-        } else {
-            this.postList = null;
-        }
+        this.postList = postList;
     }
 
     public void deactivation() {
