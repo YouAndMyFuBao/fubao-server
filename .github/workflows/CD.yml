@@ -1,13 +1,16 @@
 name: CD
 on:
-  push:
+  pull_request:
     branches:
-      - feature/#68
+      - main
+    types:
+      - closed
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
     steps:
       - name: Checkout
         uses: actions/checkout@v3
