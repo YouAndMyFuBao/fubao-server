@@ -38,11 +38,11 @@ public class SecurityConfig {
     private final String[] GET_PERMITTED_URLS = {
             "/api/swagger-ui/**", "/api/swagger-resources/**",
             "/api/v3/api-docs/**", "/api/auth/kakao", "/api/auth/refresh", "/api/auth/logout", "/api/auth/logout",
-            "/api/test/success", "/api/test/fail",
             "/api/posts","/api/posts/*", "/api/posts/*/download", "/api/posts/fubao/love"
     };
     private final String[] POST_PERMITTED_URLS = {
-            "/api/posts/fubao/love"
+            "/api/posts/fubao/love",
+            "/api/test/success", "/api/test/fail"
     };
     @Value("${security.cors-urls}")
     private final List<String> CORS_URLS;
