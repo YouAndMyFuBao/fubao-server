@@ -1,11 +1,12 @@
 package com.fubao.project.global.config.security.jwt;
 
 import com.fubao.project.domain.api.auth.dto.response.AuthTokens;
-import com.fubao.project.domain.entity.Member;
+import com.fubao.project.global.common.exception.ResponseCode;
 import com.fubao.project.global.util.RedisUtil;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,7 +19,6 @@ import javax.crypto.SecretKey;
 import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import static io.jsonwebtoken.Jwts.builder;
 
@@ -57,7 +57,7 @@ public class JwtTokenProvider {
 
     public AuthTokens createAccessToken(String id) {
         AuthTokens authTokens = AuthTokens.of(createToken(id), createRefreshToken(id));
-        redisUtil.setStringData(authTokens.getRefreshToken(),authTokens.getAccessToken(), Duration.ofDays(refreshTokenValidityInDay));
+        redisUtil.setStringData(authTokens.getRefreshToken(), authTokens.getAccessToken(), Duration.ofDays(refreshTokenValidityInDay));
         return authTokens;
     }
 
@@ -84,22 +84,26 @@ public class JwtTokenProvider {
     }
 
     // 토큰 유효성 및 만료기간 검사
-    public boolean validateToken(String token) {
+    public boolean validateToken(String token, HttpServletRequest request) {
         try {
             jwtParser.parseClaimsJws(token);
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.info("Invalid JWT signature.");
             log.trace("Invalid JWT signature trace: ", e);
+            request.setAttribute("exception", ResponseCode.INVALID_TOKEN);
         } catch (ExpiredJwtException e) {
             log.info("Expired JWT token.");
             log.trace("Expired JWT token trace: ", e);
+            request.setAttribute("exception", ResponseCode.EXPIRED_TOKEN);
         } catch (UnsupportedJwtException e) {
             log.info("Unsupported JWT token.");
             log.trace("Unsupported JWT token trace: ", e);
+            request.setAttribute("exception", ResponseCode.UNSUPPORTED_TOKEN);
         } catch (IllegalArgumentException e) {
             log.info("JWT token compact of handler are invalid.");
             log.trace("JWT token compact of handler are invalid trace: ", e);
+            request.setAttribute("exception", ResponseCode.INVALID_TOKEN);
         }
         return false;
     }
@@ -110,7 +114,8 @@ public class JwtTokenProvider {
         UserDetails userDetails = userDetailsService.loadUserByUsername(usernameFromToken);
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
-    public String getUsernameFromRefreshToken(String refreshToken){
+
+    public String getUsernameFromRefreshToken(String refreshToken) {
         return jwtParser.parseClaimsJws(refreshToken).getBody().getSubject();
     }
 }

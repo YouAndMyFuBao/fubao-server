@@ -46,7 +46,7 @@ public class OAuthLoginServiceImp implements OAuthLoginService {
 
     @Override
     public AuthTokens tokenRegenerate(TokenRegenerateRequest tokenRegenerateRequest) {
-        jwtTokenProvider.validateToken(tokenRegenerateRequest.getRefreshToken());
+        jwtTokenProvider.validateToken(tokenRegenerateRequest.getRefreshToken(),null);
         if (!redisUtil.hasKey(tokenRegenerateRequest.getRefreshToken())) {
             throw new CustomException(ResponseCode.INVALID_TOKEN);
         }

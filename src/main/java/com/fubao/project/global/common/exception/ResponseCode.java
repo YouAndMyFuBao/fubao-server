@@ -29,7 +29,11 @@ public enum ResponseCode {
     //auth
     UNAUTHORIZED("AUTH-ERR-001", HttpStatus.UNAUTHORIZED, "접근 권한이 없는 유저입니다."),
     INVALID_TOKEN("AUTH-ERR-002", HttpStatus.UNAUTHORIZED, "유효한 토큰이 아닙니다."),
-    TEST("TEST-ERR-001", HttpStatus.BAD_REQUEST, "테스트입니다");
+    EXPIRED_TOKEN("AUTH-ERR-003", HttpStatus.UNAUTHORIZED, "만료된 토근입니다."),
+    UNSUPPORTED_TOKEN("AUTH-ERR-004",HttpStatus.UNAUTHORIZED , "지원하지 않는 토큰입니다."),
+    //test
+    TEST("TEST-ERR-001", HttpStatus.BAD_REQUEST, "테스트입니다")
+    ;
     private final String code;
     private final HttpStatus status;
     private final String message;
