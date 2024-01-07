@@ -1,9 +1,6 @@
 package com.fubao.project.global.common.exception;
 
 import com.fubao.project.global.common.response.ResponseDto;
-import lombok.Getter;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 public class ErrorResponse extends ResponseDto {
     private ErrorResponse(ResponseCode errorCode) {

@@ -30,11 +30,23 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    @Value("${security.permitted-urls}")
-    private final List<String> PERMITTED_URLS;
-
+    //    @Value("${security.permitted-urls}")
+//    private final List<String> PERMITTED_URLS;
+    private final String[] GET_AUTHENTICATED_URLS = {
+            "/api/posts/my"
+    };
+    private final String[] GET_PERMITTED_URLS = {
+            "/api/swagger-ui/**", "/api/swagger-resources/**",
+            "/api/v3/api-docs/**", "/api/auth/kakao", "/api/auth/refresh", "/api/auth/logout", "/api/auth/logout",
+            "/api/test/success", "/api/test/fail",
+            "/api/posts","/api/posts/*", "/api/posts/*/download", "/api/posts/fubao/love"
+    };
+    private final String[] POST_PERMITTED_URLS = {
+            "/api/posts/fubao/love"
+    };
     @Value("${security.cors-urls}")
     private final List<String> CORS_URLS;
+
     @Bean
     public SecurityFilterChain filterChain(
             HttpSecurity http, JwtAuthenticationCheckFilter jwtAuthenticationCheckFilter,
@@ -51,9 +63,11 @@ public class SecurityConfig {
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint) //인증 중 예외 발생 시 jwtAuthenticationEntryPoint 호출
                 )
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers(PERMITTED_URLS.toArray(new String[0])).permitAll() // 해당 url의 경우 검사하지 않음
-                        .requestMatchers(HttpMethod.GET,"/").permitAll()
-                        .anyRequest().authenticated() // 모든 request는 검증
+                        .requestMatchers(HttpMethod.GET, GET_AUTHENTICATED_URLS).authenticated()
+                        .requestMatchers(HttpMethod.GET, GET_PERMITTED_URLS).permitAll()
+                        .requestMatchers(HttpMethod.POST, POST_PERMITTED_URLS).permitAll()
+                        .requestMatchers(HttpMethod.GET, "/").permitAll()
+                        .anyRequest().authenticated()
                 );
         return http.build();
     }

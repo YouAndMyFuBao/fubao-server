@@ -52,14 +52,10 @@ public class AuthController {
     @DeleteMapping("/deactivation")
     public ResponseEntity<DataResponse<CustomResponseCode>> deactivation() {
         Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
-        if (loggedInUser instanceof AnonymousAuthenticationToken) {
-            throw new CustomException(ResponseCode.UNAUTHORIZED);
-        }
         UUID memberId = UUID.fromString(loggedInUser.getName());
         oAuthLoginService.deactivation(memberId);
         return ResponseEntity.ok(DataResponse.of(CustomResponseCode.MEMBER_DEACTIVATION));
     }
-
 
     @GetMapping("/kakao/code")
     public ResponseEntity<String> code(@RequestParam String code) {
