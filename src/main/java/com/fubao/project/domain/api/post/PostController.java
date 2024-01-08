@@ -37,12 +37,16 @@ public class PostController {
 
     @Operation(summary = "편지쓰기")
     @PostMapping(value = "", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<DataResponse<PostWriteResponse>> postWrite(@RequestPart(value = "image") MultipartFile images,
+    public ResponseEntity<DataResponse<PostWriteResponse>> postWrite(@RequestPart(value = "image") MultipartFile image,
                                                                      @RequestPart(value = "data") @Validated PostWriteRequest postWriteRequest
     ) {
         Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
         UUID memberId = UUID.fromString(loggedInUser.getName());
-        return ResponseEntity.ok(DataResponse.of(postService.post(images, postWriteRequest, memberId)));
+        String contentType = image.getContentType();
+        if (contentType != null && !contentType.startsWith("image")) {
+            throw new CustomException(ResponseCode.INVALID_FILE);
+        }
+        return ResponseEntity.ok(DataResponse.of(postService.post(image, postWriteRequest, memberId)));
     }
 
     @Operation(summary = "편지수정")
@@ -54,6 +58,12 @@ public class PostController {
         UUID memberId = UUID.fromString(loggedInUser.getName());
         if ((image == null || image.isEmpty()) && postWriteRequest == null)
             throw new CustomException(ResponseCode.PATCH_POST_CONTENT_NOT_EXIST);
+        if (image != null) {
+            String contentType = image.getContentType();
+            if (contentType != null && !contentType.startsWith("image")) {
+                throw new CustomException(ResponseCode.INVALID_FILE);
+            }
+        }
         return ResponseEntity.ok(DataResponse.of(postService.patch(image, postWriteRequest, memberId, postId)));
     }
 
@@ -89,15 +99,17 @@ public class PostController {
     public ResponseEntity<DataResponse<CustomResponseCode>> deletePost(@PathVariable Long postId) {
         Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
         UUID memberId = UUID.fromString(loggedInUser.getName());
-        postService.deletePost(postId,memberId);
+        postService.deletePost(postId, memberId);
         return ResponseEntity.ok(DataResponse.of(CustomResponseCode.POST_DELETE));
     }
+
     @Operation(summary = "푸바오에게 사랑보내기")
     @PostMapping(value = "/fubao/love")
     public ResponseEntity<DataResponse<CustomResponseCode>> postFubaoLove() {
         postService.addFubaoLove();
         return ResponseEntity.ok(DataResponse.of(CustomResponseCode.FUBAO_LOVE_ADD));
     }
+
     @Operation(summary = "푸바오받은 사랑")
     @GetMapping(value = "/fubao/love")
     public ResponseEntity<DataResponse<PostGetFubaoLoveResponse>> getFubaoLove() {
