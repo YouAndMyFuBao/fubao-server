@@ -16,6 +16,7 @@ import com.fubao.project.global.util.RedisUtil;
 import com.fubao.project.global.util.S3Util;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -133,7 +134,7 @@ public class PostServiceImp implements PostService {
     }
 
     @Override
-    public byte[] getImage(Long postId) {
+    public ByteArrayResource getImage(Long postId) {
         Post post = findPostById(postId);
         return s3Util.downloadS3Image(post.getImageUrl());
     }

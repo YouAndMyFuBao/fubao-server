@@ -16,13 +16,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
@@ -80,9 +80,8 @@ public class PostController {
     @Operation(summary = "편지 이미지 다운로드")
     @GetMapping(value = "/{postId}/download")
     public ResponseEntity<ByteArrayResource> getImage(@PathVariable Long postId) {
-        byte[] image = postService.getImage(postId);
-        ByteArrayResource byteArrayResource = new ByteArrayResource(image);
-        return ResponseEntity.ok(byteArrayResource);
+        ByteArrayResource image = postService.getImage(postId);
+        return ResponseEntity.ok(image);
     }
 
     @Operation(summary = "편지 삭제")
