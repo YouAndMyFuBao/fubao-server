@@ -36,11 +36,11 @@ public class SecurityConfig {
             "/api/posts/my"
     };
     private final String[] GET_PERMITTED_URLS = {
-            "/api/swagger-ui/**", "/api/swagger-resources/**",
-            "/api/v3/api-docs/**", "/api/auth/kakao", "/api/auth/refresh", "/api/auth/logout", "/api/auth/logout",
-            "/api/posts","/api/posts/*", "/api/posts/*/download", "/api/posts/fubao/love"
+            "/api/swagger-ui/**", "/api/swagger-resources/**", "/api/v3/api-docs/**",
+            "/api/posts","/api/posts/*", "/api/posts/*/download", "/api/posts/fubao/love","/api/auth/kakao/code"
     };
     private final String[] POST_PERMITTED_URLS = {
+            "/api/auth/kakao", "/api/auth/refresh", "/api/auth/logout",
             "/api/posts/fubao/love",
             "/api/test/success", "/api/test/fail"
     };
