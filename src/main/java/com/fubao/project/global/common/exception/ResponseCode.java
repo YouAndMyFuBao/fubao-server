@@ -21,6 +21,7 @@ public enum ResponseCode {
     DO_NOT_PATCH_POST("POST_ERR_003", HttpStatus.FORBIDDEN, "본인이 작성한 편지만 수정할 수 있습니다."),
     POST_NOT_FOUND("POST-ERR-004", HttpStatus.NOT_FOUND, "존재하지 않는 편지입니다."),
     DO_NOT_DELETE_POST("POST-ERR-005", HttpStatus.FORBIDDEN, "본인이 작성한 편지만 삭제할 수 있습니다."),
+    INVALID_FILE("POST-ERR-006", HttpStatus.BAD_REQUEST, "이미지 파일이 아닙니다."),
 
     //GLOBAL
     BAD_REQUEST("GLB-ERR-001", HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
@@ -32,11 +33,11 @@ public enum ResponseCode {
     EXPIRED_TOKEN("AUTH-ERR-003", HttpStatus.UNAUTHORIZED, "만료된 토근입니다."),
     UNSUPPORTED_TOKEN("AUTH-ERR-004",HttpStatus.UNAUTHORIZED , "지원하지 않는 토큰입니다."),
     //test
-    TEST("TEST-ERR-001", HttpStatus.BAD_REQUEST, "테스트입니다")
-    ;
+    TEST("TEST-ERR-001", HttpStatus.BAD_REQUEST, "테스트입니다");
     private final String code;
     private final HttpStatus status;
     private final String message;
+
 
     public String getMessage(Throwable e) {
         return this.getMessage(this.getMessage() + " - " + e.getMessage());
