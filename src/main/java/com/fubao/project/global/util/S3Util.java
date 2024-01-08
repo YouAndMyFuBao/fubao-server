@@ -3,6 +3,7 @@ package com.fubao.project.global.util;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,6 +15,7 @@ import software.amazon.awssdk.services.s3.model.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -85,11 +87,11 @@ public class S3Util {
         s3Client.deleteObject(deleteObjectRequest);
     }
 
-    public byte[] downloadS3Image(String imageUrl) {
+    public ByteArrayResource downloadS3Image(String imageUrl) {
         GetObjectRequest getObjectRequest = GetObjectRequest.builder()
                 .bucket(bucketName)
                 .key(imageUrl.substring(cloudFrontDistribution.length())).build();
         ResponseBytes<GetObjectResponse> response = s3Client.getObjectAsBytes(getObjectRequest);
-        return response.asByteArray();
+        return new ByteArrayResource(Base64.getEncoder().encode(response.asByteArray()));
     }
 }
