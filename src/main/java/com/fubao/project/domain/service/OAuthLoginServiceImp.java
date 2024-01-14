@@ -61,6 +61,7 @@ public class OAuthLoginServiceImp implements OAuthLoginService {
     }
 
     @Override
+    @Transactional
     public void deactivation(UUID memberId) {
         Member member = findById(memberId);
         List<Post> postList = member.getPostList();
